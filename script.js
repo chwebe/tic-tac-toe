@@ -1,17 +1,3 @@
-const rows = 3;
-const cols = 3;
-const matrix = [];
-
-for (let i = 0; i < rows; i++) {
-  const row = [];
-  for (let j = 0; j < cols; j++) {
-    row.push(0);
-  }
-  matrix.push(row);
-}
-
-//console.log(matrix);
-
 function Gameboard() {
   const rows = 3;
   const cols = 3;
@@ -24,8 +10,6 @@ function Gameboard() {
     }
   }
 
-  console.log(board);
-
   const getBoard = () => board;
 
   const printBoard = () => {
@@ -33,11 +17,18 @@ function Gameboard() {
     console.log(boardWithCellValues);
   };
 
+  const resetBoard = () => {
+    board.forEach((row) => row.forEach((cell) => cell.reset()))
+  }
+
   return {
     getBoard,
-    printBoard
+    printBoard,
+    resetBoard
   };
 }
+
+// value is 0, X or O
 
 function Cell() {
     let value = 0;
@@ -49,10 +40,31 @@ function Cell() {
   
     // How we will retrieve the current value of this cell through closure
     const getValue = () => value;
-  
+    
+    const reset = () => {
+      value = 0;
+    }
+
     return {
       addToken,
-      getValue
+      getValue,
+      reset
     };
+}
+
+function Player() {
+  const players = [
+    {
+      name: playerX,
+      token: X 
+    },
+    {
+      name: playerO,
+      token: O
+    }
+  ]
+  return {
+    players
   }
+}
   
