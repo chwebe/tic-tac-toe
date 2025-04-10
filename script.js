@@ -102,6 +102,7 @@ function GameController() {
   // Row 1   [1,0]  |  [1,1]  |  [1,2]
   // -------------------
   // Row 2   [2,0]  |  [2,1]  |  [2,2]
+
   const checkWin = () => {
     const board = gameboard.getBoard();
     const winningCombinations = [
@@ -120,25 +121,68 @@ function GameController() {
 
     for (const combination of winningCombinations) {
       const [a, b, c] = combination;
-      const cellA = board[a[0]][a[1]];
-      const cellB = board[b[0]][b[1]];
-      const cellC = board[c[0]][c[1]];
+      const cellA = board[a[0]][a[1]].getValue();
+      const cellB = board[b[0]][b[1]].getValue();
+      const cellC = board[c[0]][c[1]].getValue();
 
-      if (cellA.getValue() && cellA.getValue() === cellB.getValue() && cellA.getValue() === cellC.getValue()) {
+      if (cellA === cellB && cellA === cellC) {
         return true;
       }
     }
     return false;
   }
+
+  // Check if the board is full
+  const checkDraw = () => {
+    const board = gameboard.getBoard();
+    const isFull = board.every(row => row.every(cell => cell.getValue() !== 0));
+    return isFull;
+  }
   
-  
-  
+
 
   return {
     getActivePlayer,
     switchPlayer,
     setPlayerToken,
-    checkWin
+    checkWin,
+    checkDraw
   }
 }
 
+
+const TOKENS = {
+    X: 'X',
+    O: 'O'
+  };
+
+  const players = [
+    {
+      name: 'playerX',
+      token: TOKENS.X 
+    },
+    {
+      name: 'playerO',
+      token: TOKENS.O
+    }
+  ]
+
+const board = Gameboard();
+board.getBoard()[0][0].addToken(players[0]);
+board.getBoard()[0][1].addToken(players[0]);
+board.getBoard()[0][2].addToken(players[0]);
+
+const winningCombinations = [
+  [[0, 0], [0, 1], [0, 2]],
+];
+
+for (const combination of winningCombinations) {
+    const [a, b, c] = combination;
+    const cellA = board.getBoard()[a[0]][a[1]].getValue();
+    const cellB = board.getBoard()[b[0]][b[1]].getValue();
+    const cellC = board.getBoard()[c[0]][c[1]].getValue();
+    
+    if(cellA === cellB && cellA === cellC) {
+      console.log('winner');
+    }
+}
