@@ -115,8 +115,11 @@ function GameController() {
       console.log('Draw!');
     }
     if (checkWin() || checkDraw()) {
+      console.log('Game over!');
+      gameboard.printBoard();
       gameboard.resetBoard();
-      activePlayer = players.players[0];
+      activePlayer = players.players[0]; 
+      return;
     }
     switchPlayerTurn();
     printNewRound();
@@ -178,38 +181,22 @@ function GameController() {
 }
 
 const gameController = GameController();
-const TOKENS = {
-    X: 'X',
-    O: 'O'
-  };
 
-  const players = [
-    {
-      name: 'playerX',
-      token: TOKENS.X 
-    },
-    {
-      name: 'playerO',
-      token: TOKENS.O
-    }
-  ]
+// testing draw
+gameController.playRound(0, 0);
+gameController.playRound(0, 1);
+gameController.playRound(0, 2);
+gameController.playRound(1, 1);
+gameController.playRound(1, 2);
+gameController.playRound(2, 0);
+gameController.playRound(2, 1);
+gameController.playRound(2, 2);
+gameController.playRound(1, 0);
 
-const board = Gameboard();
-//board.getBoard.addTokenToCell(0, 0, players[0]);
-//board.getBoard()[0][1].addToken(players[0]);
-//board.getBoard()[0][2].addToken(players[0]);
 
-const winningCombinations = [
-  [[0, 0], [0, 1], [0, 2]],
-];
-
-for (const combination of winningCombinations) {
-    const [a, b, c] = combination;
-    const cellA = board.getBoard()[a[0]][a[1]].getValue();
-    const cellB = board.getBoard()[b[0]][b[1]].getValue();
-    const cellC = board.getBoard()[c[0]][c[1]].getValue();
-    
-    if(cellA === cellB && cellA === cellC && cellA !== 0) {
-      console.log('winner');
-    }
-}
+// testing win
+gameController.playRound(0, 0);
+gameController.playRound(1, 0);
+gameController.playRound(0, 1);
+gameController.playRound(1, 1);
+gameController.playRound(0, 2);
