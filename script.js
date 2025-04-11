@@ -18,6 +18,18 @@ function Gameboard() {
     console.log(boardWithCellValues);
   };
 
+  // Accept a player's token to change the value of the cell
+  const addTokenToCell = (row, col, player) => {
+    const selectedCell = board[row][col];
+    if (!selectedCell) {
+      throw new Error('Invalid cell. Must provide a valid cell');
+    }
+    if (selectedCell.getValue() !== 0) {
+      throw new Error('Cell already has a token. Must provide an empty cell');
+    }
+    selectedCell.addToken(player);
+  };
+
   const resetBoard = () => {
     board.forEach((row) => row.forEach((cell) => cell.reset()))
   }
@@ -25,7 +37,8 @@ function Gameboard() {
   return {
     getBoard,
     printBoard,
-    resetBoard
+    resetBoard,
+    addTokenToCell
   };
 }
 
@@ -36,9 +49,6 @@ function Cell() {
   
     // Accept a player's token to change the value of the cell
     const addToken = (player) => {
-      if (!player || !player.token || !(player.token in TOKENS)) {
-        throw new Error('Invalid player. Must provide a valid player with X or O token');
-      }
       value = player.token;
     };
   
@@ -84,16 +94,32 @@ function GameController() {
 
   let activePlayer = players.players[0];
 
-  const switchPlayer = () => {
+  const switchPlayerTurn = () => {
     activePlayer = activePlayer === players.players[0] ? players.players[1] : players.players[0];
   }
 
   const getActivePlayer = () => activePlayer;
 
-  const setPlayerToken = (row, col) => {
-    const board = gameboard.getBoard();
-    const cell = board[row][col];
-    cell.addToken(activePlayer);
+  const printNewRound = () => {
+    gameboard.printBoard();
+    console.log(`${getActivePlayer().name}'s turn.`);
+  };
+
+  const playRound = (row, col) => {
+    gameboard.addTokenToCell(row, col, activePlayer);
+    
+    if (checkWin()) {
+      console.log(`${getActivePlayer().name} wins!`);
+    }
+    if (checkDraw()) {
+      console.log('Draw!');
+    }
+    if (checkWin() || checkDraw()) {
+      gameboard.resetBoard();
+      activePlayer = players.players[0];
+    }
+    switchPlayerTurn();
+    printNewRound();
   }
 
   //      Column 0   Column 1   Column 2
@@ -125,7 +151,7 @@ function GameController() {
       const cellB = board[b[0]][b[1]].getValue();
       const cellC = board[c[0]][c[1]].getValue();
 
-      if (cellA === cellB && cellA === cellC) {
+      if (cellA === cellB && cellA === cellC && cellA !== 0) {
         return true;
       }
     }
@@ -139,18 +165,19 @@ function GameController() {
     return isFull;
   }
   
-
+  const resetGame = () => {
+    gameboard.resetBoard();
+    activePlayer = players.players[0];
+  }
 
   return {
     getActivePlayer,
-    switchPlayer,
-    setPlayerToken,
-    checkWin,
-    checkDraw
+    playRound,
+    resetGame
   }
 }
 
-
+const gameController = GameController();
 const TOKENS = {
     X: 'X',
     O: 'O'
@@ -168,9 +195,9 @@ const TOKENS = {
   ]
 
 const board = Gameboard();
-board.getBoard()[0][0].addToken(players[0]);
-board.getBoard()[0][1].addToken(players[0]);
-board.getBoard()[0][2].addToken(players[0]);
+//board.getBoard.addTokenToCell(0, 0, players[0]);
+//board.getBoard()[0][1].addToken(players[0]);
+//board.getBoard()[0][2].addToken(players[0]);
 
 const winningCombinations = [
   [[0, 0], [0, 1], [0, 2]],
@@ -182,7 +209,7 @@ for (const combination of winningCombinations) {
     const cellB = board.getBoard()[b[0]][b[1]].getValue();
     const cellC = board.getBoard()[c[0]][c[1]].getValue();
     
-    if(cellA === cellB && cellA === cellC) {
+    if(cellA === cellB && cellA === cellC && cellA !== 0) {
       console.log('winner');
     }
 }
