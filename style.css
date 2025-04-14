@@ -24,37 +24,17 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2rem;
+    font-family: 'Roboto', sans-serif;
+    font-size: 6rem;
+    font-weight: bold;
     cursor: pointer;
-    position: relative;
+    
 }
 
 .cell:hover {
     background-color: #eaeaea;
 }
 
-.cross-container {
-    position: relative;
-    width: 80%;
-    height: 80%;        
-}
-
-.line1, .line2 {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    transform-origin: center;
-    width: 100%;
-    height: 20px;
-    background-color: red;
-    visibility: hidden;
-}
 
 
-.line1 {
-    transform: translateY(-50%) rotate(45deg);
-}
 
-.line2 {
-    transform: translateY(-50%) rotate(-45deg);
-}
