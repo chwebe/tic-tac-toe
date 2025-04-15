@@ -180,7 +180,39 @@ function GameController() {
   }
 }
 
-const gameController = GameController();
+function DisplayController() {
+  const cells = document.querySelectorAll('.cell');
+  const gameboard = Gameboard();
+  const gameController = GameController();
+
+  const handleCellClick = (event) => {
+    const cell = event.target;
+    const row = cell.dataset.row;
+    const col = cell.dataset.col;
+    gameController.playRound(row, col);
+    addTokenToCell(row, col, gameController.getActivePlayer());
+  }
+
+  const addTokenToCell = (row, col, player) => {
+    const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+    cell.textContent = player.token;
+  }
+
+  const renderGame = () => {
+    cells.forEach(cell => {
+      cell.addEventListener('click', handleCellClick);
+    });
+  }
+  
+  return {
+    renderGame
+  }
+}
+
+const displayController = DisplayController();
+displayController.renderGame();
+
+/* TESTING 
 
 // testing draw
 gameController.playRound(0, 0);
@@ -200,3 +232,4 @@ gameController.playRound(1, 0);
 gameController.playRound(0, 1);
 gameController.playRound(1, 1);
 gameController.playRound(0, 2);
+*/
