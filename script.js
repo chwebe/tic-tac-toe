@@ -117,12 +117,13 @@ function GameController() {
     if (checkWin() || checkDraw()) {
       console.log('Game over!');
       gameboard.printBoard();
-      gameboard.resetBoard();
       activePlayer = players.players[0]; 
       return;
     }
+
     switchPlayerTurn();
     printNewRound();
+    
   }
 
   //      Column 0   Column 1   Column 2
@@ -182,7 +183,6 @@ function GameController() {
 
 function DisplayController() {
   const cells = document.querySelectorAll('.cell');
-  const gameboard = Gameboard();
   const gameController = GameController();
 
   const handleCellClick = (event) => {
@@ -203,14 +203,28 @@ function DisplayController() {
       cell.addEventListener('click', handleCellClick);
     });
   }
+
+  const resetGame = () => {
+    console.log('resetting game');
+      gameController.resetGame();
+      cells.forEach(cell => {
+        cell.textContent = '';
+      });
+  }
   
   return {
-    renderGame
+    renderGame,
+    resetGame
   }
 }
 
 const displayController = DisplayController();
 displayController.renderGame();
+
+const resetButton = document.querySelector('.reset-button');
+resetButton.addEventListener('click', () => {
+  displayController.resetGame();
+});
 
 /* TESTING 
 
