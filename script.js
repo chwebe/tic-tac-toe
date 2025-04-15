@@ -123,7 +123,6 @@ function GameController() {
 
     switchPlayerTurn();
     printNewRound();
-    
   }
 
   //      Column 0   Column 1   Column 2
@@ -189,8 +188,9 @@ function DisplayController() {
     const cell = event.target;
     const row = cell.dataset.row;
     const col = cell.dataset.col;
-    gameController.playRound(row, col);
+    console.log(gameController.getActivePlayer());
     addTokenToCell(row, col, gameController.getActivePlayer());
+    gameController.playRound(row, col);
   }
 
   const addTokenToCell = (row, col, player) => {
