@@ -176,7 +176,9 @@ function GameController() {
   return {
     getActivePlayer,
     playRound,
-    resetGame
+    resetGame,
+    checkWin,
+    checkDraw
   }
 }
 
@@ -191,6 +193,9 @@ function DisplayController() {
     console.log(gameController.getActivePlayer());
     addTokenToCell(row, col, gameController.getActivePlayer());
     gameController.playRound(row, col);
+    updatePlayerTurn(gameController.getActivePlayer());
+    displayGameWinner();
+
   }
 
   const addTokenToCell = (row, col, player) => {
@@ -210,11 +215,37 @@ function DisplayController() {
       cells.forEach(cell => {
         cell.textContent = '';
       });
+
+  }
+
+  const resetTurnText = () => {
+    const turnText = document.querySelector('.player-turn-text');
+    turnText.textContent = "Player X's turn";
+  }
+
+  const updatePlayerTurn = () => {
+    const playerTurn = document.querySelector('#token-turn');
+    playerTurn.textContent = gameController.getActivePlayer().token;
+  }
+
+  const displayGameWinner = () => {
+    
+    const isWinner = gameController.checkWin();
+    const isDraw = gameController.checkDraw();
+   
+    if (isWinner) {
+      const winner = document.querySelector('.turn-text');
+      winner.textContent = "has won!!!!!"
+    }
+    if (isDraw) {
+      const draw = document.querySelector('.player-turn-text');
+      draw.textContent = 'Draw!';
+    }
   }
   
   return {
     renderGame,
-    resetGame
+    resetGame,
   }
 }
 
