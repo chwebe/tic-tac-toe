@@ -200,7 +200,9 @@ function DisplayController() {
 
   const addTokenToCell = (row, col, player) => {
     const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-    cell.textContent = player.token;
+    if(cell.textContent == '') {
+      cell.textContent = player.token;
+    }
   }
 
   const renderGame = () => {
@@ -215,14 +217,10 @@ function DisplayController() {
       cells.forEach(cell => {
         cell.textContent = '';
       });
-
+      removePlayerTurnText();
+      createPlayerTurnText();
   }
-
-  const resetTurnText = () => {
-    const turnText = document.querySelector('.player-turn-text');
-    turnText.textContent = "Player X's turn";
-  }
-
+  
   const updatePlayerTurn = () => {
     const playerTurn = document.querySelector('#token-turn');
     playerTurn.textContent = gameController.getActivePlayer().token;
@@ -242,15 +240,44 @@ function DisplayController() {
       draw.textContent = 'Draw!';
     }
   }
+  const removePlayerTurnText = () => {
+    const playerTurnDiv = document.querySelector('.player-turn');
+    if (playerTurnDiv) {
+      playerTurnDiv.removeChild(playerTurnDiv);
+    }
+  }
+  const createPlayerTurnText = () => {
+    const playerTurnDiv = document.querySelector('.player-turn') || document.createElement('div');
+    playerTurnDiv.classList.add('player-turn');
+    
+    const paragraph = document.createElement('p');
+    paragraph.className = 'player-turn-text';
+    paragraph.textContent = `Player `;
+    
+    const strong = document.createElement('strong');
+    strong.id = 'token-turn';
+    strong.textContent = gameController.getActivePlayer().token;
+    paragraph.appendChild(strong);
+
+    const span = document.createElement('span');
+    span.className = 'turn-text';
+    span.textContent = "'s turn";
+    paragraph.appendChild(span);
+    
+    playerTurnDiv.appendChild(paragraph);
+
+  }
   
   return {
     renderGame,
     resetGame,
+    createPlayerTurnText
   }
 }
 
 const displayController = DisplayController();
 displayController.renderGame();
+displayController.createPlayerTurnText();
 
 const resetButton = document.querySelector('.reset-button');
 resetButton.addEventListener('click', () => {
@@ -278,3 +305,7 @@ gameController.playRound(0, 1);
 gameController.playRound(1, 1);
 gameController.playRound(0, 2);
 */
+
+
+// draw reset into player turn text
+// reset button reset the game but not the player token.
