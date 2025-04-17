@@ -233,7 +233,7 @@ function DisplayController() {
    
     if (isWinner) {
       const winner = document.querySelector('.turn-text');
-      winner.textContent = "has won!!!!!"
+      winner.textContent = " has won!!!!!"
     }
     if (isDraw) {
       const draw = document.querySelector('.player-turn-text');
@@ -242,8 +242,9 @@ function DisplayController() {
   }
   const removePlayerTurnText = () => {
     const playerTurnDiv = document.querySelector('.player-turn');
+    const removeChild = document.querySelector('.player-turn-text');
     if (playerTurnDiv) {
-      playerTurnDiv.removeChild(playerTurnDiv);
+      playerTurnDiv.removeChild(removeChild);
     }
   }
   const createPlayerTurnText = () => {
